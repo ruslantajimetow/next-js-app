@@ -3,25 +3,30 @@ import UserButton from './user-button';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { LogIn } from 'lucide-react';
+import Image from 'next/image';
+
+import logo from '@/public/logo_next.png';
+import SigninBtnn from './signin-btn';
 
 export default async function Nav() {
   const session = await auth();
 
   return (
-    <header className="h-20 px-8">
-      <nav className="h-full">
-        <ul className="flex justify-between items-center h-full">
-          <li>Logo</li>
-          {session ? (
-            <UserButton user={session?.user} expires={session?.expires} />
-          ) : (
-            <Button variant="outline" asChild>
-              <Link href="auth/login">
-                <LogIn />
-                <span>Sign In</span>
-              </Link>
-            </Button>
-          )}
+    <header className="py-4">
+      <nav>
+        <ul className="flex justify-between items-center ">
+          <li>
+            <Link href="/">
+              <Image src={logo} alt="logo" className="w-16 rounded-full" />
+            </Link>
+          </li>
+          <li>
+            {session ? (
+              <UserButton user={session?.user} expires={session?.expires} />
+            ) : (
+              <SigninBtnn />
+            )}
+          </li>
         </ul>
       </nav>
     </header>
