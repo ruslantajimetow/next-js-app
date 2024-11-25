@@ -15,6 +15,34 @@
       "when": 1732457736660,
       "tag": "0001_tiny_colossus",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1732517928427,
+      "tag": "0002_young_professor_monster",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1732518656501,
+      "tag": "0003_stale_spitfire",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1732518867975,
+      "tag": "0004_mysterious_namora",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1732522748522,
+      "tag": "0005_adorable_wildside",
+      "breakpoints": true
     }
   ]
 }

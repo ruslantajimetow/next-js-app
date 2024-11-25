@@ -19,6 +19,9 @@ import { Button } from '../ui/button';
 import { useAction } from 'next-safe-action/hooks';
 import { cn } from '@/lib/utils';
 import { emailSignUp } from '@/server/actions/email-signup';
+import { useState } from 'react';
+import { FormSuccess } from './form-success';
+import { FormError } from './form-error';
 
 export default function RegisterForm() {
   const form = useForm({
@@ -30,7 +33,15 @@ export default function RegisterForm() {
     },
   });
 
-  const { execute, status } = useAction(emailSignUp, {});
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const { execute, status } = useAction(emailSignUp, {
+    onSuccess(data) {
+      if (data.data?.error) setError(data.data?.error);
+      if (data.data?.success) setSuccess(data.data?.success);
+    },
+  });
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     execute(values);
@@ -97,6 +108,9 @@ export default function RegisterForm() {
                 </FormItem>
               )}
             />
+
+            <FormSuccess message={success} />
+            <FormError message={error} />
 
             <Button
               className={cn(
