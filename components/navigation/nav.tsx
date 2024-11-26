@@ -10,7 +10,7 @@ import SigninBtnn from './signin-btn';
 
 export default async function Nav() {
   const session = await auth();
-
+  console.log(session);
   return (
     <header className="py-4">
       <nav>
@@ -21,11 +21,11 @@ export default async function Nav() {
             </Link>
           </li>
           <li>
-            {session ? (
+            {session && (
               <UserButton user={session?.user} expires={session?.expires} />
-            ) : (
-              <SigninBtnn />
             )}
+
+            {!session && <SigninBtnn />}
           </li>
         </ul>
       </nav>

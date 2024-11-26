@@ -20,6 +20,9 @@ import Link from 'next/link';
 import { emailSignIn } from '@/server/actions/email-signin';
 import { useAction } from 'next-safe-action/hooks';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import { FormSuccess } from './form-success';
+import { FormError } from './form-error';
 
 export default function LoginForm() {
   const form = useForm({
@@ -30,7 +33,15 @@ export default function LoginForm() {
     },
   });
 
-  const { execute, status } = useAction(emailSignIn, {});
+  const { execute, status } = useAction(emailSignIn, {
+    onSuccess(data) {
+      if (data.data?.success) setSuccess(data.data.success);
+      if (data.data?.error) setError(data.data.error);
+    },
+  });
+
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     execute(values);
@@ -78,6 +89,10 @@ export default function LoginForm() {
                 </FormItem>
               )}
             />
+
+            <FormSuccess message={success} />
+            <FormError message={error} />
+
             <Button size={'sm'} variant={'link'}>
               <Link href="auth/reset">Forgot your password?</Link>
             </Button>

@@ -9,7 +9,7 @@ export default function SigninBtnn() {
   const currentPath = usePathname();
   console.log(currentPath);
   return (
-    currentPath !== '/auth/login' && (
+    !currentPath.includes('auth') && (
       <Button variant="outline" asChild>
         <Link href="auth/login">
           <LogIn />

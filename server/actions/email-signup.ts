@@ -23,6 +23,7 @@ export const emailSignUp = actionClient
     if (existingUser) {
       if (!existingUser.emailVerified) {
         const verificationToken = await generateEmailVerificationToken(email);
+        console.log(verificationToken);
         await sendVerification(
           verificationToken[0].email,
           verificationToken[0].token
@@ -36,6 +37,7 @@ export const emailSignUp = actionClient
     await db.insert(users).values({
       email,
       name: userName,
+      password: hashedPassword,
     });
 
     const verificationToken = await generateEmailVerificationToken(email);
