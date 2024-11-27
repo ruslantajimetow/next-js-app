@@ -25,6 +25,7 @@ import { FormSuccess } from './form-success';
 import { FormError } from './form-error';
 
 export default function LoginForm() {
+  console.log(Math.random() > 0.5);
   const form = useForm({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
