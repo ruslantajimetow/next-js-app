@@ -29,9 +29,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
-      authorize: async (
-        credentials: Partial<Record<'email' | 'password', unknown>>
-      ) => {
+      authorize: async (credentials) => {
         try {
           const validatedFields = LoginSchema.safeParse(credentials);
           console.log(validatedFields.data);

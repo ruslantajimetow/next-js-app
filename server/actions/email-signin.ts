@@ -30,7 +30,9 @@ export const emailSignIn = actionClient
         );
         await sendVerification(
           verificationToken[0].email,
-          verificationToken[0].token
+          verificationToken[0].token,
+          'new-verification',
+          'Confirm Email'
         );
         return { success: 'Confirm your email. Confirmation Email sent!' };
       }

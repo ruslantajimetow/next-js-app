@@ -12,78 +12,65 @@ import {
 } from '../ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import AuthWrapper from './auth-wrapper';
-import { LoginSchema } from '@/types/login-schema';
 import { z } from 'zod';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import Link from 'next/link';
-import { emailSignIn } from '@/server/actions/email-signin';
 import { useAction } from 'next-safe-action/hooks';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { FormSuccess } from './form-success';
 import { FormError } from './form-error';
+import { NewPasswordSchema } from '@/types/new-password-schema';
+import { newPassword } from '@/server/actions/new-password';
+import { useSearchParams } from 'next/navigation';
 
-export default function LoginForm() {
-  console.log(Math.random() > 0.5);
-  const form = useForm({
-    resolver: zodResolver(LoginSchema),
+export default function NewPasswordForm() {
+  const form = useForm<z.infer<typeof NewPasswordSchema>>({
+    resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
-      email: '',
       password: '',
     },
   });
 
-  const { execute, status } = useAction(emailSignIn, {
+  const { execute, status } = useAction(newPassword, {
     onSuccess(data) {
       if (data.data?.success) setSuccess(data.data.success);
       if (data.data?.error) setError(data.data.error);
     },
   });
 
+  const params = useSearchParams();
+  const token = params.get('token');
+
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    execute(values);
+  const onSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
+    execute({ ...values, token });
   };
   return (
     <AuthWrapper
-      title="Welcome Back"
-      backButtonHref="/auth/register"
-      backButtonLable="Create a new Account"
-      showSocials
+      title="Enter new password"
+      backButtonHref="/auth/login"
+      backButtonLable="Back to login"
     >
       <div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-semibold">Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="example@gmail.com"
-                      type="email"
-                      autoComplete="email"
-                    />
-                  </FormControl>
-                  <FormDescription />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">Password</FormLabel>
+                  <FormLabel className="font-semibold">New password</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="password" type="password" />
+                    <Input
+                      {...field}
+                      placeholder="new password"
+                      type="password"
+                      autoComplete="email"
+                      disabled={status === 'executing'}
+                    />
                   </FormControl>
                   <FormDescription />
                   <FormMessage />
@@ -93,10 +80,6 @@ export default function LoginForm() {
 
             <FormSuccess message={success} />
             <FormError message={error} />
-
-            <Button size={'sm'} variant={'link'}>
-              <Link href="/auth/reset">Forgot your password?</Link>
-            </Button>
             <Button
               className={cn(
                 'w-full',
@@ -104,7 +87,7 @@ export default function LoginForm() {
               )}
               type="submit"
             >
-              Login
+              Change password
             </Button>
           </form>
         </Form>

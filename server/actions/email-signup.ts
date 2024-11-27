@@ -26,7 +26,9 @@ export const emailSignUp = actionClient
         console.log(verificationToken);
         await sendVerification(
           verificationToken[0].email,
-          verificationToken[0].token
+          verificationToken[0].token,
+          'new-verification',
+          'Confirm Email'
         );
 
         return { success: 'Email confirmation resent!' };
@@ -43,7 +45,9 @@ export const emailSignUp = actionClient
     const verificationToken = await generateEmailVerificationToken(email);
     await sendVerification(
       verificationToken[0].email,
-      verificationToken[0].token
+      verificationToken[0].token,
+      'new-verification',
+      'Confirm Email'
     );
 
     return { success: 'Confirmation email sent!' };
