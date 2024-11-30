@@ -16,7 +16,12 @@ export default async function Nav() {
         <ul className="flex justify-between items-center ">
           <li>
             <Link href="/">
-              <Image src={logo} alt="logo" className="w-16 rounded-full" />
+              <Image
+                src={logo}
+                alt="logo"
+                className="w-16 rounded-full"
+                priority
+              />
             </Link>
           </li>
           <li>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import Nav from '@/components/navigation/nav';
 import { cn } from '@/lib/utils';
+import { ThemeProvider } from '@/components/providers/theme-provider';
 
 export const metadata: Metadata = {
   title: 'Next-App',
@@ -14,12 +15,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={cn('px-6 md:px-12 max-w-7xl mx-auto')}>
-        <div>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Nav />
           {children}
-        </div>
+        </ThemeProvider>
       </body>
     </html>
   );

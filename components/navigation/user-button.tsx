@@ -12,15 +12,45 @@ import { LogOut, Moon, Settings, Sun, TruckIcon } from 'lucide-react';
 
 import { Session } from 'next-auth';
 import { signOut } from 'next-auth/react';
+import { useTheme } from 'next-themes';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { Switch } from '../ui/switch';
 
 export default function UserButton({ user }: Session) {
+  const { setTheme, theme } = useTheme();
+  const [checked, setChecked] = useState<boolean>(false);
+
+  const changeThemeHandler = () => {
+    switch (theme) {
+      case 'dark':
+        return setChecked(true);
+      case 'light':
+        return setChecked(false);
+      case 'system':
+        return setChecked(false);
+    }
+  };
+
+  useEffect(() => {
+    changeThemeHandler();
+  }, []);
+
+  const onChangeSwithcHandler = (checked: boolean) => {
+    setChecked((prev) => !prev);
+    if (checked) setTheme('dark');
+    if (!checked) setTheme('light');
+  };
+
+  console.log(theme);
   if (user) {
     return (
       <div>
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger>
-            {user.image && <Image src={user.image} alt={user.name!} />}
+            {user.image && (
+              <Image src={user.image} alt={user.name!} fill={true} />
+            )}
             {!user.image && (
               <div className="w-8 h-8 flex items-center justify-center rounded-full bg-primary/25">
                 <span>{user.name?.charAt(0).toUpperCase()}</span>
@@ -48,9 +78,27 @@ export default function UserButton({ user }: Session) {
               <span>Settings</span>
             </DropdownMenuItem>
             <DropdownMenuItem className="group flex items-center cursor-pointer">
-              <Sun />
-              <Moon />
-              <span>Theme: theme</span>
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="flex gap-2 items-center"
+              >
+                {theme === 'dark' ? (
+                  <Moon className="text-blue-600" />
+                ) : (
+                  <Sun className="text-yellow-400" />
+                )}
+                {theme && (
+                  <span>
+                    {theme?.charAt(0).toUpperCase() + theme?.slice(1)}
+                  </span>
+                )}
+
+                <Switch
+                  className="scale-75"
+                  checked={checked}
+                  onCheckedChange={onChangeSwithcHandler}
+                />
+              </div>
             </DropdownMenuItem>
             <DropdownMenuItem
               className="mt-3 group flex items-center cursor-pointer focus:bg-destructive/20 transition-all duration-200"
